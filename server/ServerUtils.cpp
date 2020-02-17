@@ -306,6 +306,33 @@ bool setupTLMessageMedia(TLMessageMedia *output, const MediaData *mediaData)
     return true;
 }
 
+bool updateToShortUpdate(TLUpdates *updates, const TLUpdate &update)
+{
+    updates->pts = update.pts;
+    updates->ptsCount = update.ptsCount;
+
+    const TLMessage &shortMessage = update.message;
+    updates->id = shortMessage.id;
+    updates->flags = shortMessage.flags;
+    updates->message = shortMessage.message;
+    updates->date = shortMessage.date;
+    updates->fwdFrom = shortMessage.fwdFrom;
+    updates->replyToMsgId = shortMessage.replyToMsgId;
+    if (shortMessage.toId.tlType == TLValue::PeerUser) {
+        updates->tlType = TLValue::UpdateShortMessage;
+        if (shortMessage.out()) {
+            updates->userId = shortMessage.toId.userId;
+        } else {
+            updates->userId = shortMessage.fromId;
+        }
+    } else {
+        updates->tlType = TLValue::UpdateShortChatMessage;
+        updates->chatId = shortMessage.toId.chatId;
+        updates->fromId = shortMessage.fromId;
+    }
+    return true;
+}
+
 } // Utils namespace
 
 } // Server namespace

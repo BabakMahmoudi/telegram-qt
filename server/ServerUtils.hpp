@@ -44,6 +44,8 @@ bool setupTLPeers(T *output,
 bool setupTLPhoto(TLPhoto *output, const ImageDescriptor &image);
 bool setupTLFileLocation(TLFileLocation *output, const FileDescriptor &file);
 
+bool updateToShortUpdate(TLUpdates *updates, const TLUpdate &update);
+
 } // Utils namespace
 
 } // Server namespace
